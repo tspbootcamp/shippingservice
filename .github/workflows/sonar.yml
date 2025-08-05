@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   sonarQubeScan:
@@ -11,10 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v2
+        uses: SonarSource/sonarcloud-github-action@v2
         with:
-          projectBaseDir: .
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: http://16.52.52.212:9000
+          args: >
+            -Dsonar.projectKey=shippingservice
+            -Dsonar.organization=tspbootcamp
+            -Dsonar.host.url=http://16.52.52.212:9000
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
